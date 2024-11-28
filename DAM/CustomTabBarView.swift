@@ -20,10 +20,10 @@ struct CustomTabBarView: View {
                 .tabItem {
                     Image(systemName: "plus.circle.fill")
                 }
-            Text("Boutique")
+            Text("Historique")
                 .tabItem {
                     Image(systemName: "clock")
-                   // Text("Historique")
+                    // Text("Historique")
                 }
             ProfileControllerView(isLoggedOut: $isLoggedOut)
                 .tabItem {
@@ -36,20 +36,12 @@ struct CustomTabBarView: View {
         .accentColor(.blue) // Couleur de l'onglet sélectionné
     }
     
-    
-        
-        
-            
-                
-       
-
-
-       
     struct ProfileControllerView: View {
-        @State private var userProfile: User? // Modèle utilisateur (assurez-vous qu'il existe).
-        @State private var isLoading = true // Indicateur de chargement.
-        @State private var hasError = false // Indicateur d'erreur.
-        @Binding var isLoggedOut: Bool // Pour gérer la déconnexion.
+        @State private var userProfile: User? // Modèle utilisateur
+        @State private var isLoading = true // Indicateur de chargement
+        @State private var hasError = false // Indicateur d'erreur
+        @Binding var isLoggedOut: Bool // Pour gérer la déconnexion
+        @State private var isDarkMode = false // Variable pour gérer le mode sombre
 
         var body: some View {
             VStack {
@@ -64,7 +56,7 @@ struct CustomTabBarView: View {
                 } else if let profile = userProfile {
                     VStack {
                         // Affichage de l'image de profil
-                        Image("user") // Remplacez par l'image dans vos assets.
+                        Image("user") // Remplacez par l'image dans vos assets
                             .resizable()
                             .scaledToFill()
                             .frame(width: 100, height: 100)
@@ -83,7 +75,7 @@ struct CustomTabBarView: View {
                     .padding()
                     .background(Color.blue)
                     
-                    // Détails utilisateur centrés
+                    // Détails utilisateur
                     VStack(alignment: .center, spacing: 10) {
                         ProfileDetailRow(icon: "envelope", text: profile.email ?? "Email non disponible")
                         ProfileDetailRow(icon: "phone", text: profile.phone ?? "Téléphone non disponible")
@@ -94,7 +86,7 @@ struct CustomTabBarView: View {
                     .cornerRadius(12)
                     .shadow(radius: 5)
                     .padding(.horizontal)
-
+                    
                     Spacer()
                     
                     // Boutons
@@ -102,13 +94,36 @@ struct CustomTabBarView: View {
                         // Bouton Modifier le profil
                         if let userProfile = userProfile {
                             NavigationLink(destination: EditProfileView(user: userProfile)) {
-                                Text("Modifier le profil")
-                                    .fontWeight(.bold)
-                                    .foregroundColor(.blue)
-                                    .padding()
-                                    .background(Capsule().stroke(Color.blue, lineWidth: 2))
+                                VStack {
+                                    Text("Modifier le profil")
+                                        .fontWeight(.bold)
+                                        .foregroundColor(.blue)
+                                        .padding()
+                                        .frame(maxWidth: .infinity)
+                                }
+                                .background(Color.white)
+                                .cornerRadius(12)
+                                .shadow(color: .gray, radius: 5, x: 0, y: 5)
                             }
                         }
+                        // Carte Dark Mode
+                        Button(action: {
+                            isDarkMode.toggle()
+                            // Bascule entre les modes clair et sombre
+                            UIApplication.shared.windows.first?.rootViewController?.view.overrideUserInterfaceStyle = isDarkMode ? .dark : .light
+                        }) {
+                            VStack {
+                                Text(isDarkMode ? "Passer en mode clair" : "Passer en mode Dark")
+                                    .fontWeight(.bold)
+                                    .foregroundColor(isDarkMode ? .green : .black)
+                                    .padding()
+                                    .frame(maxWidth: .infinity)
+                            }
+                            .background(Color.white)
+                            .cornerRadius(12)
+                            .shadow(color: .gray, radius: 5, x: 0, y: 5)
+                        }
+                    }
                         
                         // Bouton Déconnexion
                         Button(action: {
@@ -116,15 +131,18 @@ struct CustomTabBarView: View {
                             UserDefaults.standard.removeObject(forKey: "refreshToken")
                             isLoggedOut = true
                         }) {
-                            Text("Déconnexion")
-                                .fontWeight(.bold)
-                                .foregroundColor(.red)
-                                .padding()
-                                .background(Capsule().stroke(Color.red, lineWidth: 2))
+                            VStack {
+                                Text("Déconnexion")
+                                    .fontWeight(.bold)
+                                    .foregroundColor(.red)
+                                    .padding()
+                                    .frame(maxWidth: .infinity)
+                            }
+                            .background(Color.white)
+                            .cornerRadius(12)
+                            .shadow(color: .gray, radius: 5, x: 0, y: 5)
                         }
-                    }
-                    .padding(.bottom)
-                    
+
                     // Terms and Conditions Link
                     Text("Terms and Conditions")
                         .foregroundColor(.blue)
@@ -228,20 +246,8 @@ struct CustomTabBarView: View {
         }
     }
 
-  
-
-    struct EditProfileView: View {
-        var user: User
-        
-        var body: some View {
-            Text("Édition du profil pour \(user.name ?? "Nom non disponible")")
-                .padding()
-        }
-    }
+    
 }
-
-
-
 
 
 

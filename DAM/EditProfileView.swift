@@ -1,11 +1,3 @@
-//
-//  EditProfileView.swift
-//  DAM
-//
-//  Created by Apple Esprit on 27/11/2024.
-//
-
-import Foundation
 import SwiftUI
 
 struct EditProfileView: View {
@@ -19,76 +11,95 @@ struct EditProfileView: View {
     @State private var isLoading = false
     
     var body: some View {
-        VStack {
-            Text("Édition du profil pour \(user.name ?? "Nom non disponible")")
-                .font(.title)
-                .padding(.top)
-            
-            Form {
-                // Nom
-                Section(header: Text("Nom")) {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 20) {
+                Text("Édition du profil")
+                    .font(.title)
+                    .fontWeight(.semibold)
+                    .foregroundColor(.primary)
+                    .padding(.top)
+                
+                VStack(spacing: 15) {
+                    // Nom
                     TextField("Nom", text: $name)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .onAppear {
-                            name = user.name ?? ""
-                        }
-                }
-                
-                // Email
-                Section(header: Text("Email")) {
-                    TextField("Email", text: $email)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .onAppear {
-                            email = user.email ?? ""
-                        }
-                }
-                
-                // Téléphone
-                Section(header: Text("Téléphone")) {
-                    TextField("Téléphone", text: $phone)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .onAppear {
-                            phone = user.phone ?? ""
-                        }
-                }
-                
-                // Mot de passe
-                Section(header: Text("Mot de passe")) {
-                    SecureField("Nouveau mot de passe", text: $password)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                    SecureField("Confirmer le mot de passe", text: $confirmPassword)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                }
-                
-                if let errorMessage = errorMessage {
-                    Text(errorMessage)
-                        .foregroundColor(.red)
-                        .font(.caption)
                         .padding()
-                }
-                
-                // Bouton de sauvegarde
-                Section {
+                        .background(RoundedRectangle(cornerRadius: 10).strokeBorder(Color.gray, lineWidth: 1))
+                        .textFieldStyle(PlainTextFieldStyle())
+                        .padding(.horizontal)
+                        .onAppear { name = user.name ?? "" }
+                    
+                    // Email
+                    TextField("Email", text: $email)
+                        .padding()
+                        .background(RoundedRectangle(cornerRadius: 10).strokeBorder(Color.gray, lineWidth: 1))
+                        .textFieldStyle(PlainTextFieldStyle())
+                        .padding(.horizontal)
+                        .onAppear { email = user.email ?? "" }
+                    
+                    // Téléphone
+                    TextField("Téléphone", text: $phone)
+                        .padding()
+                        .background(RoundedRectangle(cornerRadius: 10).strokeBorder(Color.gray, lineWidth: 1))
+                        .textFieldStyle(PlainTextFieldStyle())
+                        .padding(.horizontal)
+                        .onAppear { phone = user.phone ?? "" }
+                    
+                    // Mot de passe
+                    SecureField("Nouveau mot de passe", text: $password)
+                        .padding()
+                        .background(RoundedRectangle(cornerRadius: 10).strokeBorder(Color.gray, lineWidth: 1))
+                        .textFieldStyle(PlainTextFieldStyle())
+                        .padding(.horizontal)
+                    
+                    SecureField("Confirmer le mot de passe", text: $confirmPassword)
+                        .padding()
+                        .background(RoundedRectangle(cornerRadius: 10).strokeBorder(Color.gray, lineWidth: 1))
+                        .textFieldStyle(PlainTextFieldStyle())
+                        .padding(.horizontal)
+                    
+                    // Error message
+                    if let errorMessage = errorMessage {
+                        Text(errorMessage)
+                            .foregroundColor(.red)
+                            .font(.caption)
+                            .padding(.horizontal)
+                    }
+                    
+                    // Bouton de sauvegarde
                     Button(action: saveProfile) {
-                        if isLoading {
-                            ProgressView()
-                                .progressViewStyle(CircularProgressViewStyle())
-                        } else {
-                            Text("Sauvegarder")
-                                .fontWeight(.bold)
-                                .foregroundColor(.white)
-                                .padding()
-                                .background(Capsule().fill(Color.blue))
+                        HStack {
+                            if isLoading {
+                                ProgressView()
+                                    .progressViewStyle(CircularProgressViewStyle())
+                                    .frame(width: 20, height: 20)
+                            } else {
+                                Text("Sauvegarder")
+                                    .fontWeight(.bold)
+                                    .foregroundColor(.white)
+                                    .padding()
+                                    .frame(maxWidth: .infinity)
+                                    .background(Capsule().fill(Color.blue))
+                                    .padding(.horizontal)
+                            }
                         }
                     }
+                    .disabled(isLoading)  // Disable the button during loading
+                    
                 }
+                .padding(.top)
             }
+            .padding(.bottom)
         }
-        .padding()
+        .background(Color(UIColor.systemBackground))
         .navigationTitle("Modifier le profil")
         .navigationBarTitleDisplayMode(.inline)
+        .onAppear {
+            // Populate fields with existing user data
+            name = user.name ?? ""
+            email = user.email ?? ""
+            phone = user.phone ?? ""
+        }
     }
-    
     private func saveProfile() {
         isLoading = true
         errorMessage = nil
@@ -130,18 +141,26 @@ struct EditProfileView: View {
         var request = URLRequest(url: url)
         request.httpMethod = "PUT"
         
-        // Ajouter le token dans les en-têtes
+        // Vérifier si le token est dans UserDefaults
         if let token = UserDefaults.standard.string(forKey: "accessToken") {
+            print("Token récupéré: \(token)")
             request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        } else {
+            errorMessage = "Token d'authentification non trouvé."
+            isLoading = false
+            return
         }
+
         
         // Encoder les données en JSON
         do {
             let jsonData = try JSONSerialization.data(withJSONObject: data, options: .prettyPrinted)
             request.httpBody = jsonData
         } catch {
-            errorMessage = "Erreur lors de la création des données : \(error.localizedDescription)"
-            isLoading = false
+            DispatchQueue.main.async {
+                errorMessage = "Erreur lors de l'encodage des données : \(error.localizedDescription)"
+                isLoading = false
+            }
             return
         }
         
@@ -152,9 +171,8 @@ struct EditProfileView: View {
             }
             
             if let error = error {
-                print("Erreur lors de la mise à jour du profil : \(error.localizedDescription)")
                 DispatchQueue.main.async {
-                    errorMessage = "Erreur lors de la mise à jour du profil."
+                    errorMessage = "Erreur lors de la mise à jour du profil : \(error.localizedDescription)"
                 }
                 return
             }
@@ -166,24 +184,44 @@ struct EditProfileView: View {
                 return
             }
             
-            if let responseString = String(data: data, encoding: .utf8) {
-                print("Réponse brute de l'API : \(responseString)")
-            }
-            
-            if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 {
-                DispatchQueue.main.async {
-                    // Mise à jour réussie, revenir en arrière ou afficher une confirmation
-                    print("Profil mis à jour avec succès.")
-                    // Vous pouvez également mettre à jour localement les données du profil ici si nécessaire.
+            // Extraire la réponse HTTP
+            if let httpResponse = response as? HTTPURLResponse {
+                // Affichage des détails de la réponse pour déboguer
+                print("Code de statut HTTP: \(httpResponse.statusCode)")
+                if let responseBody = String(data: data, encoding: .utf8) {
+                    print("Réponse du serveur: \(responseBody)")
+                }
+                
+                switch httpResponse.statusCode {
+                case 200...299:
+                    DispatchQueue.main.async {
+                        // Mettez à jour le profil de l'utilisateur local (binding)
+                        user.name = name
+                        user.email = email
+                        user.phone = phone
+                        if !password.isEmpty {
+                            user.password = password
+                        }
+                        print("Profil mis à jour avec succès.")
+                    }
+                case 400:
+                    DispatchQueue.main.async {
+                        errorMessage = "Données invalides. Vérifiez votre entrée."
+                    }
+                case 500:
+                    DispatchQueue.main.async {
+                        errorMessage = "Erreur serveur. Essayez plus tard."
+                    }
+                default:
+                    DispatchQueue.main.async {
+                        errorMessage = "Erreur inconnue. Code: \(httpResponse.statusCode)"
+                    }
                 }
             } else {
                 DispatchQueue.main.async {
-                    errorMessage = "Erreur lors de la mise à jour du profil."
+                    errorMessage = "Réponse du serveur invalide."
                 }
             }
         }.resume()
     }
 }
-
-
-

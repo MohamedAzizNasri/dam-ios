@@ -23,6 +23,7 @@
 		B0AB273C2CE3658400F80455 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0AB273B2CE3658400F80455 /* ProfileViewController.swift */; };
 		B0AB273E2CE3886F00F80455 /* ImagePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0AB273D2CE3886F00F80455 /* ImagePickerViewController.swift */; };
 		B0AB27402CE38F2B00F80455 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0AB273F2CE38F2B00F80455 /* ContentView.swift */; };
+		B0CA71A32CF87BC20044718E /* VerifSignViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CA71A22CF87BC20044718E /* VerifSignViewController.swift */; };
 		B0CF5B872CDD3C9A00F62740 /* ForgetPSViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CF5B862CDD3C9A00F62740 /* ForgetPSViewController.swift */; };
 		B0D6796F2CF7A2F90019D332 /* VerifLogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D6796E2CF7A2F90019D332 /* VerifLogViewController.swift */; };
 		B0D679712CF7BA850019D332 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D679702CF7BA850019D332 /* User.swift */; };
@@ -49,6 +50,7 @@
 		B0AB273B2CE3658400F80455 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		B0AB273D2CE3886F00F80455 /* ImagePickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePickerViewController.swift; sourceTree = "<group>"; };
 		B0AB273F2CE38F2B00F80455 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		B0CA71A22CF87BC20044718E /* VerifSignViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerifSignViewController.swift; sourceTree = "<group>"; };
 		B0CF5B862CDD3C9A00F62740 /* ForgetPSViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgetPSViewController.swift; sourceTree = "<group>"; };
 		B0D6796E2CF7A2F90019D332 /* VerifLogViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerifLogViewController.swift; sourceTree = "<group>"; };
 		B0D679702CF7BA850019D332 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -88,6 +90,7 @@
 			children = (
 				1319BA882CDBBFD200985AB8 /* AppDelegate.swift */,
 				B0AB273D2CE3886F00F80455 /* ImagePickerViewController.swift */,
+				B0CA71A22CF87BC20044718E /* VerifSignViewController.swift */,
 				1319BA8A2CDBBFD200985AB8 /* SceneDelegate.swift */,
 				B0D679702CF7BA850019D332 /* User.swift */,
 				1319BA8C2CDBBFD200985AB8 /* ViewController.swift */,
@@ -199,6 +202,7 @@
 				B049050E2CE25294000A9489 /* RecupCodeViewController.swift in Sources */,
 				1319BAA42CDC17FF00985AB8 /* ResetPViewController.swift in Sources */,
 				1319BAA02CDC0AFF00985AB8 /* LoginViewController.swift in Sources */,
+				B0CA71A32CF87BC20044718E /* VerifSignViewController.swift in Sources */,
 				1319BA8B2CDBBFD200985AB8 /* SceneDelegate.swift in Sources */,
 				B0AB273A2CE3537B00F80455 /* CustomTabBarView.swift in Sources */,
 			);

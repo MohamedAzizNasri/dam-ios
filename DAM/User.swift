@@ -11,12 +11,22 @@ struct User: Identifiable, Codable {
     var name: String
     var email: String
     var phone: String
+    var password: String?
+
+    // Initialiseur optionnel pour le décodage
+    enum CodingKeys: String, CodingKey {
+        case id = "_id"
+        case name
+        case email
+        case phone
+    }
     
-    // Initialisateur optionnel pour le décodage
     init(id: String, name: String, email: String, phone: String) {
         self.id = id
         self.name = name
         self.email = email
         self.phone = phone
+        
     }
 }
+
