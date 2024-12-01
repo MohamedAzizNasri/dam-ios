@@ -19,12 +19,18 @@ struct CustomTabBarView: View {
             ContentView()
                 .tabItem {
                     Image(systemName: "plus.circle.fill")
+                    Text("Add")
                 }
-            Text("Historique")
-                .tabItem {
-                    Image(systemName: "clock")
-                    // Text("Historique")
-                }
+            
+            // Use a NavigationLink for the Historique tab
+            NavigationView {
+                HistoryView() // Directly show the HistoryView
+            }
+            .tabItem {
+                Image(systemName: "clock")
+                Text("Historique")
+            }
+
             ProfileControllerView(isLoggedOut: $isLoggedOut)
                 .tabItem {
                     Image(systemName: "person")

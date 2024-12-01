@@ -29,6 +29,7 @@
 		B0D679712CF7BA850019D332 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D679702CF7BA850019D332 /* User.swift */; };
 		B0D679752CF7BB160019D332 /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D679742CF7BB160019D332 /* EditProfileView.swift */; };
 		B0D679772CF7D21E0019D332 /* HistoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D679762CF7D21E0019D332 /* HistoryViewModel.swift */; };
+		B0D9E8682CFCF717008274F7 /* HistoryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D9E8672CFCF717008274F7 /* HistoryItem.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -56,6 +57,7 @@
 		B0D679702CF7BA850019D332 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		B0D679742CF7BB160019D332 /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
 		B0D679762CF7D21E0019D332 /* HistoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryViewModel.swift; sourceTree = "<group>"; };
+		B0D9E8672CFCF717008274F7 /* HistoryItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryItem.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,6 +113,7 @@
 				B0D6796E2CF7A2F90019D332 /* VerifLogViewController.swift */,
 				B0D679742CF7BB160019D332 /* EditProfileView.swift */,
 				B0D679762CF7D21E0019D332 /* HistoryViewModel.swift */,
+				B0D9E8672CFCF717008274F7 /* HistoryItem.swift */,
 			);
 			path = DAM;
 			sourceTree = "<group>";
@@ -199,6 +202,7 @@
 				B0AB27382CE351C900F80455 /* HomeViewController.swift in Sources */,
 				B0AB273C2CE3658400F80455 /* ProfileViewController.swift in Sources */,
 				B0AB273E2CE3886F00F80455 /* ImagePickerViewController.swift in Sources */,
+				B0D9E8682CFCF717008274F7 /* HistoryItem.swift in Sources */,
 				B049050E2CE25294000A9489 /* RecupCodeViewController.swift in Sources */,
 				1319BAA42CDC17FF00985AB8 /* ResetPViewController.swift in Sources */,
 				1319BAA02CDC0AFF00985AB8 /* LoginViewController.swift in Sources */,
