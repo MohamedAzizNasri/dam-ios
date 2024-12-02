@@ -49,7 +49,7 @@ class VerifLogViewController: UIViewController {
     
     // Fonction pour envoyer la requête API de vérification
     private func verifyCode(parameters: [String: Any]) {
-        guard let url = URL(string: "http://172.18.8.47:3001/auth/verify-login") else { return }
+        guard let url = URL(string: "http://192.168.218.54:3001/auth/verify-login") else { return }
         
         do {
             let jsonData = try JSONSerialization.data(withJSONObject: parameters, options: [])

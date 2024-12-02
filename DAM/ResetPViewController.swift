@@ -39,7 +39,7 @@ class ResetPViewController: UIViewController,UITextFieldDelegate {
 
           // Sends the signup request to the server
           private func sendSignupRequest(parameters: [String: Any]) {
-              guard let url = URL(string: "http://172.18.8.47:3001/auth/reset-password") else { return }
+              guard let url = URL(string: "http://192.168.218.54:3001/auth/reset-password") else { return }
 
               do {
                   let jsonData = try JSONSerialization.data(withJSONObject: parameters, options: [])

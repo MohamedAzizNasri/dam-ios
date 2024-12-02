@@ -101,7 +101,7 @@ struct CustomTabBarView: View {
                         if let userProfile = userProfile {
                             NavigationLink(destination: EditProfileView(user: userProfile)) {
                                 VStack {
-                                    Text("Modifier le profil")
+                                    Text("Edit profil")
                                         .fontWeight(.bold)
                                         .foregroundColor(.blue)
                                         .padding()
@@ -119,7 +119,7 @@ struct CustomTabBarView: View {
                             UIApplication.shared.windows.first?.rootViewController?.view.overrideUserInterfaceStyle = isDarkMode ? .dark : .light
                         }) {
                             VStack {
-                                Text(isDarkMode ? "Passer en mode clair" : "Passer en mode Dark")
+                                Text(isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode")
                                     .fontWeight(.bold)
                                     .foregroundColor(isDarkMode ? .green : .black)
                                     .padding()
@@ -170,7 +170,7 @@ struct CustomTabBarView: View {
             isLoading = true
             hasError = false
             
-            guard let url = URL(string: "http://172.18.8.47:3001/profile") else {
+            guard let url = URL(string: "http://192.168.218.54:3001/profile") else {
                 print("URL invalide.")
                 hasError = true
                 isLoading = false

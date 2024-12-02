@@ -9,6 +9,7 @@ struct EditProfileView: View {
     @State private var confirmPassword = ""
     @State private var errorMessage: String?
     @State private var isLoading = false
+    @Environment(\.presentationMode) var presentationMode
     
     var body: some View {
         ScrollView {
@@ -24,7 +25,6 @@ struct EditProfileView: View {
                     TextField("Nom", text: $name)
                         .padding()
                         .background(RoundedRectangle(cornerRadius: 10).strokeBorder(Color.gray, lineWidth: 1))
-                        .textFieldStyle(PlainTextFieldStyle())
                         .padding(.horizontal)
                         .onAppear { name = user.name ?? "" }
                     
@@ -32,7 +32,6 @@ struct EditProfileView: View {
                     TextField("Email", text: $email)
                         .padding()
                         .background(RoundedRectangle(cornerRadius: 10).strokeBorder(Color.gray, lineWidth: 1))
-                        .textFieldStyle(PlainTextFieldStyle())
                         .padding(.horizontal)
                         .onAppear { email = user.email ?? "" }
                     
@@ -40,7 +39,6 @@ struct EditProfileView: View {
                     TextField("Téléphone", text: $phone)
                         .padding()
                         .background(RoundedRectangle(cornerRadius: 10).strokeBorder(Color.gray, lineWidth: 1))
-                        .textFieldStyle(PlainTextFieldStyle())
                         .padding(.horizontal)
                         .onAppear { phone = user.phone ?? "" }
                     
@@ -48,13 +46,11 @@ struct EditProfileView: View {
                     SecureField("Nouveau mot de passe", text: $password)
                         .padding()
                         .background(RoundedRectangle(cornerRadius: 10).strokeBorder(Color.gray, lineWidth: 1))
-                        .textFieldStyle(PlainTextFieldStyle())
                         .padding(.horizontal)
                     
                     SecureField("Confirmer le mot de passe", text: $confirmPassword)
                         .padding()
                         .background(RoundedRectangle(cornerRadius: 10).strokeBorder(Color.gray, lineWidth: 1))
-                        .textFieldStyle(PlainTextFieldStyle())
                         .padding(.horizontal)
                     
                     // Error message
@@ -94,12 +90,12 @@ struct EditProfileView: View {
         .navigationTitle("Modifier le profil")
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
-            // Populate fields with existing user data
             name = user.name ?? ""
             email = user.email ?? ""
             phone = user.phone ?? ""
         }
     }
+    
     private func saveProfile() {
         isLoading = true
         errorMessage = nil
@@ -132,7 +128,7 @@ struct EditProfileView: View {
     }
     
     private func updateProfile(with data: [String: String]) {
-        guard let url = URL(string: "http://172.18.8.47:3001/profile") else {
+        guard let url = URL(string: "http://192.168.218.54:3001/profile") else {
             errorMessage = "URL invalide."
             isLoading = false
             return
@@ -140,6 +136,7 @@ struct EditProfileView: View {
         
         var request = URLRequest(url: url)
         request.httpMethod = "PUT"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
         // Vérifier si le token est dans UserDefaults
         if let token = UserDefaults.standard.string(forKey: "accessToken") {
@@ -151,7 +148,6 @@ struct EditProfileView: View {
             return
         }
 
-        
         // Encoder les données en JSON
         do {
             let jsonData = try JSONSerialization.data(withJSONObject: data, options: .prettyPrinted)
@@ -184,42 +180,25 @@ struct EditProfileView: View {
                 return
             }
             
-            // Extraire la réponse HTTP
             if let httpResponse = response as? HTTPURLResponse {
-                // Affichage des détails de la réponse pour déboguer
-                print("Code de statut HTTP: \(httpResponse.statusCode)")
-                if let responseBody = String(data: data, encoding: .utf8) {
-                    print("Réponse du serveur: \(responseBody)")
-                }
-                
-                switch httpResponse.statusCode {
-                case 200...299:
-                    DispatchQueue.main.async {
-                        // Mettez à jour le profil de l'utilisateur local (binding)
-                        user.name = name
-                        user.email = email
-                        user.phone = phone
-                        if !password.isEmpty {
-                            user.password = password
-                        }
-                        print("Profil mis à jour avec succès.")
-                    }
-                case 400:
-                    DispatchQueue.main.async {
-                        errorMessage = "Données invalides. Vérifiez votre entrée."
-                    }
-                case 500:
-                    DispatchQueue.main.async {
-                        errorMessage = "Erreur serveur. Essayez plus tard."
-                    }
-                default:
-                    DispatchQueue.main.async {
-                        errorMessage = "Erreur inconnue. Code: \(httpResponse.statusCode)"
-                    }
-                }
-            } else {
                 DispatchQueue.main.async {
-                    errorMessage = "Réponse du serveur invalide."
+                    print("Réponse HTTP : \(httpResponse.statusCode)")
+                    if let responseBody = String(data: data, encoding: .utf8) {
+                        print("Réponse brute : \(responseBody)")
+                    }
+                    
+                    switch httpResponse.statusCode {
+                    case 200...299:
+                        user.name = name
+                        user.phone = phone
+                        presentationMode.wrappedValue.dismiss()
+                    case 400:
+                        errorMessage = "Données invalides. Vérifiez votre entrée."
+                    case 500:
+                        errorMessage = "Erreur serveur. Réessayez plus tard."
+                    default:
+                        errorMessage = "Erreur inconnue (code : \(httpResponse.statusCode))"
+                    }
                 }
             }
         }.resume()

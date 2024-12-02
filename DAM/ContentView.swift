@@ -281,7 +281,7 @@ struct ContentView: View {
         ]
 
         // Effectuer la requête POST à votre backend
-        guard let url = URL(string: "http://172.18.8.47:3001/history") else { return }
+        guard let url = URL(string: "http://192.168.218.54:3001/history") else { return }
 
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
