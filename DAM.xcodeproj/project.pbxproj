@@ -18,6 +18,7 @@
 		1319BAA22CDC170200985AB8 /* SignupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1319BAA12CDC170200985AB8 /* SignupViewController.swift */; };
 		1319BAA42CDC17FF00985AB8 /* ResetPViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1319BAA32CDC17FF00985AB8 /* ResetPViewController.swift */; };
 		B049050E2CE25294000A9489 /* RecupCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B049050D2CE25294000A9489 /* RecupCodeViewController.swift */; };
+		B08923DA2D085EC800D55B35 /* Product.swift in Sources */ = {isa = PBXBuildFile; fileRef = B08923D92D085EC800D55B35 /* Product.swift */; };
 		B0AB27382CE351C900F80455 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0AB27372CE351C900F80455 /* HomeViewController.swift */; };
 		B0AB273A2CE3537B00F80455 /* CustomTabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0AB27392CE3537B00F80455 /* CustomTabBarView.swift */; };
 		B0AB273C2CE3658400F80455 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0AB273B2CE3658400F80455 /* ProfileViewController.swift */; };
@@ -46,6 +47,7 @@
 		1319BAA12CDC170200985AB8 /* SignupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupViewController.swift; sourceTree = "<group>"; };
 		1319BAA32CDC17FF00985AB8 /* ResetPViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPViewController.swift; sourceTree = "<group>"; };
 		B049050D2CE25294000A9489 /* RecupCodeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RecupCodeViewController.swift; path = ../RecupCodeViewController.swift; sourceTree = "<group>"; };
+		B08923D92D085EC800D55B35 /* Product.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Product.swift; sourceTree = "<group>"; };
 		B0AB27372CE351C900F80455 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		B0AB27392CE3537B00F80455 /* CustomTabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBarView.swift; sourceTree = "<group>"; };
 		B0AB273B2CE3658400F80455 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
@@ -100,6 +102,7 @@
 				B0AB273F2CE38F2B00F80455 /* ContentView.swift */,
 				B0AB27372CE351C900F80455 /* HomeViewController.swift */,
 				B0AB27392CE3537B00F80455 /* CustomTabBarView.swift */,
+				B08923D92D085EC800D55B35 /* Product.swift */,
 				B0AB273B2CE3658400F80455 /* ProfileViewController.swift */,
 				1319BAA32CDC17FF00985AB8 /* ResetPViewController.swift */,
 				B049050D2CE25294000A9489 /* RecupCodeViewController.swift */,
@@ -209,6 +212,7 @@
 				B0CA71A32CF87BC20044718E /* VerifSignViewController.swift in Sources */,
 				1319BA8B2CDBBFD200985AB8 /* SceneDelegate.swift in Sources */,
 				B0AB273A2CE3537B00F80455 /* CustomTabBarView.swift in Sources */,
+				B08923DA2D085EC800D55B35 /* Product.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -11,7 +11,7 @@ struct CustomTabBarView: View {
                     Image(systemName: "house")
                     Text("Home")
                 }
-            Text("Boutique")
+            ProductListView()
                 .tabItem {
                     Image(systemName: "cart")
                     Text("Shop")
@@ -170,7 +170,7 @@ struct CustomTabBarView: View {
             isLoading = true
             hasError = false
             
-            guard let url = URL(string: "http://192.168.218.54:3001/profile") else {
+            guard let url = URL(string: "http://192.168.1.161:3001/profile") else {
                 print("URL invalide.")
                 hasError = true
                 isLoading = false
@@ -256,4 +256,88 @@ struct CustomTabBarView: View {
 }
 
 
+class ProductViewModel: ObservableObject {
+    @Published var products: [Product] = []
+    func fetchProducts() {
+        guard let url = URL(string: "http://192.168.1.161:3001/product") else { return }
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            if let data = data {
+                DispatchQueue.main.async {
+                    do {
+                        self.products = try JSONDecoder().decode([Product].self, from: data)
+                        
+                    } catch {
+                        print("Erreur de décodage : \(error)")
+                        
+                    } } }
+            else if let error = error {
+                print("Erreur réseau : \(error)")
+                
+            } }.resume()
+        
+    } }
+struct ProductListView: View {
+    @StateObject private var viewModel = ProductViewModel()
+    private let baseURL = "http://192.168.1.161:3001" 
+    
+    var body: some View {
+        NavigationView {
+            ScrollView {
+                LazyVStack(spacing: 15) {
+                    // Utilisation directe de `ForEach` avec un tableau
+                    ForEach(viewModel.products.indices, id: \.self) { index in
+                        let product = viewModel.products[index]
+                        VStack(alignment: .leading, spacing: 10) {
+                            // Gestion de l'image
+                            if let imageData = Data(base64Encoded: product.image),
+                                                          let uiImage = UIImage(data: imageData) {
+                                                           // Image encodée en Base64
+                                                           Image(uiImage: uiImage)
+                                                               .resizable()
+                                                               .aspectRatio(contentMode: .fill)
+                                                               .frame(height: 150)
+                                                               .clipped()
+                                                       } else if let imageUrl = URL(string: baseURL + product.image) {
+                                                           // URL relative complétée
+                                                           AsyncImage(url: imageUrl) { image in
+                                                               image
+                                                                   .resizable()
+                                                                   .aspectRatio(contentMode: .fill)
+                                                                   .frame(height: 150)
+                                                                   .clipped()
+                                                           } placeholder: {
+                                                               ProgressView()
+                                                           }
+                                                       } else {
+                                                           // Placeholder si l'image n'est pas valide
+                                                           Rectangle()
+                                                               .fill(Color.gray.opacity(0.3))
+                                                               .frame(height: 150)
+                                                               .overlay(Text("Image indisponible"))
+                                                       }
+                            // Nom du produit
+                            Text(product.name)
+                                .font(.headline)
+                                .lineLimit(2)
+                            
+                            // Prix
+                            Text("Prix : \(product.price, specifier: "%.2f") €")
+                                .font(.body)
+                                .foregroundColor(.green)
+                        }
+                        .padding()
+                        .background(Color.white)
+                        .cornerRadius(10)
+                        .shadow(radius: 5)
+                    }
+                }
+                .padding()
+            }
+            .navigationTitle("Produits")
+            .onAppear {
+                viewModel.fetchProducts()
+            }
+        }
+    }
+}
 

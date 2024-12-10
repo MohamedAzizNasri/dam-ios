@@ -88,7 +88,7 @@ class SignupViewController: UIViewController {
 
           // MARK: - Network Methods
           private func sendSignupRequest(parameters: [String: Any]) {
-              guard let url = URL(string: "http://192.168.218.54:3001/auth/signup") else { return }
+              guard let url = URL(string: "http://192.168.1.161:3001/auth/signup") else { return }
 
               do {
                   let jsonData = try JSONSerialization.data(withJSONObject: parameters, options: [])
@@ -128,7 +128,7 @@ class SignupViewController: UIViewController {
                   if let jsonResponse = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
                      let statusCode = jsonResponse["statusCode"] as? Int {
                       DispatchQueue.main.async {
-                          if statusCode == 200 {
+                          if statusCode >= 200 {
                               self.showAlert(title: "Success", message: "Signup successful.") { _ in
                                   self.performSegue(withIdentifier: "verSeg", sender: self.mail.text)
                               }

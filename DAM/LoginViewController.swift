@@ -65,7 +65,7 @@ import UIKit
        
 
         private func sendSignupRequest(parameters: [String: Any]) {
-               guard let url = URL(string: "http://192.168.218.54:3001/auth/login") else { return }
+               guard let url = URL(string: "http://192.168.1.161:3001/auth/login") else { return }
 
                do {
                    let jsonData = try JSONSerialization.data(withJSONObject: parameters, options: [])
