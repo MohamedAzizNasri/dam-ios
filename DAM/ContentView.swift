@@ -1,218 +1,4 @@
-/*
-import SwiftUI
-import WebKit
-
-struct ContentView: View {
-    @State private var selectedImage: UIImage?
-    @State private var resultText: String = "Résultat : Aucun"
-    @State private var showImagePicker = false
-    @State private var isLoading = false
-
-    var body: some View {
-        VStack {
-      
-            // WebView pour afficher et interagir avec l'IA
-            WebView(resultText: $resultText)
-              
-                .cornerRadius(10)
-        }
-        .padding()
-    }
-}
-
-struct WebView: UIViewRepresentable {
-    @Binding var resultText: String
-    
-    func makeUIView(context: Context) -> WKWebView {
-        let webView = WKWebView()
-        webView.navigationDelegate = context.coordinator
-        webView.configuration.userContentController.add(context.coordinator, name: "AndroidBridge")
-        
-        // Charger l'application Gradio
-        if let url = URL(string: "https://mirai310-wound-identifier-2.hf.space") {
-            let request = URLRequest(url: url)
-            webView.load(request)
-        }
-        return webView
-    }
-    
-    func updateUIView(_ uiView: WKWebView, context: Context) {}
-
-    func makeCoordinator() -> Coordinator {
-        return Coordinator(self)
-    }
-
-    class Coordinator: NSObject, WKNavigationDelegate, WKScriptMessageHandler {
-        var parent: WebView
-        
-        init(_ parent: WebView) {
-            self.parent = parent
-        }
-        
-        // Réception des messages depuis le JavaScript
-        func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-            if message.name == "AndroidBridge", let result = message.body as? String {
-                DispatchQueue.main.async {
-                    self.parent.resultText = "Résultat : \(result)"
-                }
-            }
-        }
-        
-        func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-            // Injecter le script JavaScript pour observer les résultats
-            let script = """
-            (function() {
-                const observer = new MutationObserver(() => {
-                    const resultElement = document.querySelector('.output-class.svelte-1pq4gst');
-                    if (resultElement) {
-                        const results = resultElement.innerText || resultElement.textContent;
-                        window.webkit.messageHandlers.AndroidBridge.postMessage(results);
-                    }
-                });
-                observer.observe(document.body, { childList: true, subtree: true });
-            })();
-            """
-            webView.evaluateJavaScript(script, completionHandler: nil)
-        }
-    }
-}
-
-*/
 /*import SwiftUI
-import WebKit
-
-struct ContentView: View {
-    @State private var selectedImage: UIImage?
-    @State private var resultText: String = "Résultat : Aucun"
-    @State private var showImagePicker = false
-    @State private var isLoading = false
-
-    var body: some View {
-        VStack {
-            // WebView pour afficher l'interface de l'IA
-            WebView(resultText: $resultText)
-                .cornerRadius(10)
-                .padding()
-
-            if let selectedImage = selectedImage {
-                Image(uiImage: selectedImage)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 200, height: 200)
-                    .padding()
-                
-                // Bouton pour envoyer l'image et le résultat au backend
-                Button("Envoyer l'image et le résultat") {
-                    sendHistoryToBackend(image: selectedImage, result: resultText)
-                }
-                .padding()
-            }
-        }
-        .sheet(isPresented: $showImagePicker) {
-            ImagePickerViewController(selectedImage: $selectedImage)
-        }
-        .padding()
-    }
-
-    // Fonction pour convertir l'image en base64
-    func convertImageToBase64(image: UIImage) -> String? {
-        guard let imageData = image.jpegData(compressionQuality: 0.8) else { return nil }
-        return imageData.base64EncodedString(options: .lineLength64Characters)
-    }
-
-    // Fonction pour envoyer l'image et le résultat au backend
-    func sendHistoryToBackend(image: UIImage, result: String) {
-        guard let base64Image = convertImageToBase64(image: image) else {
-            print("Erreur lors de la conversion de l'image en base64")
-            return
-        }
-
-        let woundHistory = [
-            "image": base64Image,
-            "description": result, // Utilisation du texte résultant de l'IA
-        ]
-
-        // Effectuer la requête POST à votre backend
-        guard let url = URL(string: "http://172.18.8.47:3001/history") else { return }
-        
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        
-        do {
-            request.httpBody = try JSONSerialization.data(withJSONObject: woundHistory, options: .prettyPrinted)
-            
-            let task = URLSession.shared.dataTask(with: request) { data, response, error in
-                if let error = error {
-                    print("Erreur lors de l'envoi de l'historique : \(error.localizedDescription)")
-                    return
-                }
-                // Traitez la réponse du serveur ici si nécessaire (optionnel)
-            }
-            task.resume()
-        } catch {
-            print("Erreur lors de la préparation des données : \(error.localizedDescription)")
-        }
-    }
-}
-
-struct WebView: UIViewRepresentable {
-    @Binding var resultText: String
-    
-    func makeUIView(context: Context) -> WKWebView {
-        let webView = WKWebView()
-        webView.navigationDelegate = context.coordinator
-        webView.configuration.userContentController.add(context.coordinator, name: "AndroidBridge")
-        
-        // Charger l'application Gradio
-        if let url = URL(string: "https://mirai310-wound-identifier-2.hf.space") {
-            let request = URLRequest(url: url)
-            webView.load(request)
-        }
-        return webView
-    }
-    
-    func updateUIView(_ uiView: WKWebView, context: Context) {}
-
-    func makeCoordinator() -> Coordinator {
-        return Coordinator(self)
-    }
-
-    class Coordinator: NSObject, WKNavigationDelegate, WKScriptMessageHandler {
-        var parent: WebView
-        
-        init(_ parent: WebView) {
-            self.parent = parent
-        }
-        
-        // Réception des messages depuis le JavaScript
-        func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-            if message.name == "AndroidBridge", let result = message.body as? String {
-                DispatchQueue.main.async {
-                    self.parent.resultText = "Résultat : \(result)"
-                }
-            }
-        }
-        
-        func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-            // Injecter le script JavaScript pour observer les résultats
-            let script = """
-            (function() {
-                const observer = new MutationObserver(() => {
-                    const resultElement = document.querySelector('.output-class.svelte-1pq4gst');
-                    if (resultElement) {
-                        const results = resultElement.innerText || resultElement.textContent;
-                        window.webkit.messageHandlers.AndroidBridge.postMessage(results);
-                    }
-                });
-                observer.observe(document.body, { childList: true, subtree: true });
-            })();
-            """
-            webView.evaluateJavaScript(script, completionHandler: nil)
-        }
-    }
-}*/
-import SwiftUI
 import WebKit
 
 struct ContentView: View {
@@ -272,6 +58,7 @@ struct ContentView: View {
             print("Aucun token d'accès trouvé dans UserDefaults.")
             return
         }
+        
 
         // Créer un objet JSON avec l'image et la description
         let woundHistory: [String: Any] = [
@@ -281,7 +68,7 @@ struct ContentView: View {
         ]
 
         // Effectuer la requête POST à votre backend
-        guard let url = URL(string: "http://192.168.1.161:3001/history") else { return }
+        guard let url = URL(string: "http://172.18.19.1:3001/history") else { return }
 
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
@@ -403,72 +190,81 @@ struct ImagePicker: UIViewControllerRepresentable {
         }
     }
 }
+*/
 
-
-/*import SwiftUI
+import SwiftUI
 import WebKit
 
 struct ContentView: View {
     @State private var selectedImage: UIImage?
     @State private var resultText: String = "Résultat : Aucun"
-    @State private var isLoading = false
 
     var body: some View {
         VStack {
+            // WebView pour afficher l'interface de l'IA
             WebView(resultText: $resultText, selectedImage: $selectedImage)
                 .cornerRadius(10)
                 .padding()
 
+            // Vérifier si une image a été sélectionnée
             if let selectedImage = selectedImage {
+                // Afficher l'image si elle a été sélectionnée
                 Image(uiImage: selectedImage)
                     .resizable()
                     .scaledToFit()
                     .frame(width: 200, height: 200)
                     .padding()
 
-                Text(resultText)
-                    .padding()
-
+                // Bouton pour sauvegarder le résultat
                 Button("Sauvegarder le résultat") {
                     sendHistoryToBackend(image: selectedImage, result: resultText)
                 }
                 .padding()
+                .frame(maxWidth: .infinity) // Assurez-vous que le bouton occupe toute la largeur possible
+                .background(Color.blue) // Ajoutez un fond pour rendre le bouton plus visible
+                .foregroundColor(.white) // Couleur du texte du bouton
+                .cornerRadius(10) // Arrondir les coins du bouton
             } else {
                 Text("Aucune image sélectionnée")
-                    .padding()
+                    .foregroundColor(.gray)
             }
         }
         .padding()
     }
 
+    // Fonction pour convertir l'image en base64
     func convertImageToBase64(image: UIImage) -> String? {
         guard let imageData = image.jpegData(compressionQuality: 0.8) else { return nil }
         return imageData.base64EncodedString(options: .lineLength64Characters)
     }
 
+    // Fonction pour envoyer l'image et le résultat au backend
     func sendHistoryToBackend(image: UIImage, result: String) {
         guard let base64Image = convertImageToBase64(image: image) else {
             print("Erreur lors de la conversion de l'image en base64")
             return
         }
 
+        // Récupérer le token d'accès depuis UserDefaults
         guard let accessToken = UserDefaults.standard.string(forKey: "accessToken") else {
             print("Aucun token d'accès trouvé dans UserDefaults.")
             return
         }
 
+        // Créer un objet JSON avec l'image et la description
         let woundHistory: [String: Any] = [
             "image": base64Image,
             "description": result,
             "createdAt": ISO8601DateFormatter().string(from: Date())
         ]
 
-        guard let url = URL(string: "http://172.18.8.47:3001/history") else { return }
+        // Effectuer la requête POST à votre backend
+        guard let url = URL(string: "http://172.18.19.1:3001/history") else { return }
 
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+        request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")  // Ajouter le token à l'en-tête
 
         do {
             request.httpBody = try JSONSerialization.data(withJSONObject: woundHistory, options: .prettyPrinted)
@@ -492,73 +288,71 @@ struct ContentView: View {
     }
 }
 
+// WebView pour afficher l'interface Gradio et récupérer l'image téléchargée
 struct WebView: UIViewRepresentable {
     @Binding var resultText: String
     @Binding var selectedImage: UIImage?
-
+    
     func makeUIView(context: Context) -> WKWebView {
         let webView = WKWebView()
         webView.navigationDelegate = context.coordinator
-        webView.configuration.userContentController.add(context.coordinator, name: "ImageBridge")
-
+        webView.configuration.userContentController.add(context.coordinator, name: "AndroidBridge")
+        
+        // Charger l'application Gradio
         if let url = URL(string: "https://mirai310-wound-identifier-2.hf.space") {
             let request = URLRequest(url: url)
             webView.load(request)
         }
         return webView
     }
-
+    
     func updateUIView(_ uiView: WKWebView, context: Context) {}
-
+    
     func makeCoordinator() -> Coordinator {
         return Coordinator(self)
     }
-
+    
     class Coordinator: NSObject, WKNavigationDelegate, WKScriptMessageHandler {
-        var parent: WebView
-
-        init(_ parent: WebView) {
-            self.parent = parent
-        }
-
-        func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-            if message.name == "ImageBridge", let base64String = message.body as? String {
-                self.fetchImage(from: base64String)
-            }
-        }
-
-        func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-            let script = """
-            (function() {
-                const imgElement = document.querySelector('img');  // Get the first <img> element
-                if (imgElement) {
-                    const imageUrl = imgElement.src;
-                    console.log('Image URL:', imageUrl);  // Check if the image URL is correct
-                    fetch(imageUrl)
-                        .then(response => response.blob())
-                        .then(blob => {
-                            const reader = new FileReader();
-                            reader.onloadend = function() {
-                                const base64String = reader.result.split(',')[1];
-                                console.log('Base64 String:', base64String);  // Check the base64 string
-                                window.webkit.messageHandlers.ImageBridge.postMessage(base64String);
-                            };
-                            reader.readAsDataURL(blob);
-                        })
-                        .catch(err => console.log('Error fetching image:', err));
-                }
-            })();
-            """
-            webView.evaluateJavaScript(script, completionHandler: nil)
-        }
-
-        func fetchImage(from base64String: String) {
-            if let imageData = Data(base64Encoded: base64String), let image = UIImage(data: imageData) {
-                DispatchQueue.main.async {
-                    self.parent.selectedImage = image
-                }
-            }
-        }
-    }
-}
-*/
+     var parent: WebView
+     
+     init(_ parent: WebView) {
+     self.parent = parent
+     }
+     
+     // Réception des messages depuis le JavaScript
+     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+     // Vérifier que le message reçu est bien l'image en base64
+     if let base64Image = message.body as? String {
+     // Convertir le base64 en UIImage
+     if let imageData = Data(base64Encoded: base64Image), let image = UIImage(data: imageData) {
+     DispatchQueue.main.async {
+     self.parent.selectedImage = image
+     }
+     }
+     }
+     }
+     
+     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+     // Injecter le script JavaScript pour détecter le téléchargement de l'image
+     let script = """
+     (function() {
+     const inputElement = document.querySelector('input[type="file"]');
+     if (inputElement) {
+     inputElement.addEventListener('change', function(event) {
+     const file = event.target.files[0];
+     if (file && file.type.startsWith('image/')) {
+     const reader = new FileReader();
+     reader.onload = function(e) {
+     window.webkit.messageHandlers.AndroidBridge.postMessage(e.target.result);
+     };
+     reader.readAsDataURL(file); // Convertir l'image en base64
+     }
+     });
+     }
+     })();
+     """
+     webView.evaluateJavaScript(script, completionHandler: nil)
+     }
+     }
+     }
+   

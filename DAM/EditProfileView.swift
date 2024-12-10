@@ -128,7 +128,7 @@ struct EditProfileView: View {
     }
     
     private func updateProfile(with data: [String: String]) {
-        guard let url = URL(string: "http://192.168.1.161:3001/profile") else {
+        guard let url = URL(string: "http://172.18.19.1:3001/profile") else {
             errorMessage = "URL invalide."
             isLoading = false
             return

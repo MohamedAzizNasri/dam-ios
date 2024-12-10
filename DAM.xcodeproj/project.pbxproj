@@ -18,6 +18,7 @@
 		1319BAA22CDC170200985AB8 /* SignupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1319BAA12CDC170200985AB8 /* SignupViewController.swift */; };
 		1319BAA42CDC17FF00985AB8 /* ResetPViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1319BAA32CDC17FF00985AB8 /* ResetPViewController.swift */; };
 		B049050E2CE25294000A9489 /* RecupCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B049050D2CE25294000A9489 /* RecupCodeViewController.swift */; };
+		B0738A492D0894C2008ECE01 /* HistroyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0738A482D0894C2008ECE01 /* HistroyView.swift */; };
 		B08923DA2D085EC800D55B35 /* Product.swift in Sources */ = {isa = PBXBuildFile; fileRef = B08923D92D085EC800D55B35 /* Product.swift */; };
 		B0AB27382CE351C900F80455 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0AB27372CE351C900F80455 /* HomeViewController.swift */; };
 		B0AB273A2CE3537B00F80455 /* CustomTabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0AB27392CE3537B00F80455 /* CustomTabBarView.swift */; };
@@ -29,7 +30,6 @@
 		B0D6796F2CF7A2F90019D332 /* VerifLogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D6796E2CF7A2F90019D332 /* VerifLogViewController.swift */; };
 		B0D679712CF7BA850019D332 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D679702CF7BA850019D332 /* User.swift */; };
 		B0D679752CF7BB160019D332 /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D679742CF7BB160019D332 /* EditProfileView.swift */; };
-		B0D679772CF7D21E0019D332 /* HistoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D679762CF7D21E0019D332 /* HistoryViewModel.swift */; };
 		B0D9E8682CFCF717008274F7 /* HistoryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D9E8672CFCF717008274F7 /* HistoryItem.swift */; };
 /* End PBXBuildFile section */
 
@@ -47,6 +47,7 @@
 		1319BAA12CDC170200985AB8 /* SignupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupViewController.swift; sourceTree = "<group>"; };
 		1319BAA32CDC17FF00985AB8 /* ResetPViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPViewController.swift; sourceTree = "<group>"; };
 		B049050D2CE25294000A9489 /* RecupCodeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RecupCodeViewController.swift; path = ../RecupCodeViewController.swift; sourceTree = "<group>"; };
+		B0738A482D0894C2008ECE01 /* HistroyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistroyView.swift; sourceTree = "<group>"; };
 		B08923D92D085EC800D55B35 /* Product.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Product.swift; sourceTree = "<group>"; };
 		B0AB27372CE351C900F80455 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		B0AB27392CE3537B00F80455 /* CustomTabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBarView.swift; sourceTree = "<group>"; };
@@ -58,7 +59,6 @@
 		B0D6796E2CF7A2F90019D332 /* VerifLogViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerifLogViewController.swift; sourceTree = "<group>"; };
 		B0D679702CF7BA850019D332 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		B0D679742CF7BB160019D332 /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
-		B0D679762CF7D21E0019D332 /* HistoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryViewModel.swift; sourceTree = "<group>"; };
 		B0D9E8672CFCF717008274F7 /* HistoryItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryItem.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -115,8 +115,8 @@
 				B0CF5B862CDD3C9A00F62740 /* ForgetPSViewController.swift */,
 				B0D6796E2CF7A2F90019D332 /* VerifLogViewController.swift */,
 				B0D679742CF7BB160019D332 /* EditProfileView.swift */,
-				B0D679762CF7D21E0019D332 /* HistoryViewModel.swift */,
 				B0D9E8672CFCF717008274F7 /* HistoryItem.swift */,
+				B0738A482D0894C2008ECE01 /* HistroyView.swift */,
 			);
 			path = DAM;
 			sourceTree = "<group>";
@@ -193,7 +193,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				B0CF5B872CDD3C9A00F62740 /* ForgetPSViewController.swift in Sources */,
-				B0D679772CF7D21E0019D332 /* HistoryViewModel.swift in Sources */,
 				B0D679752CF7BB160019D332 /* EditProfileView.swift in Sources */,
 				1319BAA22CDC170200985AB8 /* SignupViewController.swift in Sources */,
 				B0AB27402CE38F2B00F80455 /* ContentView.swift in Sources */,
@@ -205,6 +204,7 @@
 				B0AB27382CE351C900F80455 /* HomeViewController.swift in Sources */,
 				B0AB273C2CE3658400F80455 /* ProfileViewController.swift in Sources */,
 				B0AB273E2CE3886F00F80455 /* ImagePickerViewController.swift in Sources */,
+				B0738A492D0894C2008ECE01 /* HistroyView.swift in Sources */,
 				B0D9E8682CFCF717008274F7 /* HistoryItem.swift in Sources */,
 				B049050E2CE25294000A9489 /* RecupCodeViewController.swift in Sources */,
 				1319BAA42CDC17FF00985AB8 /* ResetPViewController.swift in Sources */,

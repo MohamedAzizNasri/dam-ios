@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct CustomTabBarView: View {
-    @State private var isLoggedOut = false  // Flag pour vérifier la déconnexion
+    @State private var isLoggedOut = false
     @State private var selectedTab = "Accueil"
     
     var body: some View {
@@ -22,9 +22,9 @@ struct CustomTabBarView: View {
                     Text("Add")
                 }
             
-            // Use a NavigationLink for the Historique tab
+            // Navigation view for the Historique tab
             NavigationView {
-                HistoryView() // Directly show the HistoryView
+                HistoryListView()
             }
             .tabItem {
                 Image(systemName: "clock")
@@ -37,91 +37,71 @@ struct CustomTabBarView: View {
                     Text("Profil")
                 }
         }
-        .navigationTitle(selectedTab) // Change dynamiquement selon l'onglet
+        .navigationTitle(selectedTab)
         .navigationBarTitleDisplayMode(.inline)
-        .accentColor(.blue) // Couleur de l'onglet sélectionné
+        .accentColor(.blue)
     }
+}
+
+struct ProfileControllerView: View {
+    @State private var userProfile: User?
+    @State private var isLoading = true
+    @State private var hasError = false
+    @Binding var isLoggedOut: Bool
+    @State private var isDarkMode = false
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode> // Fix for dismissal
+    @Environment(\.colorScheme) var colorScheme // Environment to detect current mode
     
-    struct ProfileControllerView: View {
-        @State private var userProfile: User? // Modèle utilisateur
-        @State private var isLoading = true // Indicateur de chargement
-        @State private var hasError = false // Indicateur d'erreur
-        @Binding var isLoggedOut: Bool // Pour gérer la déconnexion
-        @State private var isDarkMode = false // Variable pour gérer le mode sombre
-
-        var body: some View {
-            VStack {
-                if isLoading {
-                    ProgressView("Chargement...")
-                        .progressViewStyle(CircularProgressViewStyle(tint: .blue))
-                        .padding()
-                } else if hasError {
-                    Text("Impossible de charger le profil utilisateur.")
-                        .foregroundColor(.red)
-                        .padding()
-                } else if let profile = userProfile {
-                    VStack {
-                        // Affichage de l'image de profil
-                        Image("user") // Remplacez par l'image dans vos assets
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 100, height: 100)
-                            .clipShape(Circle())
-                            .overlay(Circle().stroke(Color.white, lineWidth: 4))
-                            .shadow(radius: 5)
-
-                        // Nom d'utilisateur
-                        Text(profile.name ?? "Nom d'utilisateur")
-                            .font(.title2)
-                            .fontWeight(.bold)
-                            .foregroundColor(.white)
-                            .padding(.top, 8)
-                    }
-                    .frame(maxWidth: .infinity)
+    var body: some View {
+        VStack {
+            if isLoading {
+                ProgressView("Chargement...")
+                    .progressViewStyle(CircularProgressViewStyle(tint: .blue))
                     .padding()
-                    .background(Color.blue)
-                    
-                    // Détails utilisateur
-                    VStack(alignment: .center, spacing: 10) {
-                        ProfileDetailRow(icon: "envelope", text: profile.email ?? "Email non disponible")
-                        ProfileDetailRow(icon: "phone", text: profile.phone ?? "Téléphone non disponible")
-                    }
-                    .frame(maxWidth: .infinity)
+            } else if hasError {
+                Text("Impossible de charger le profil utilisateur.")
+                    .foregroundColor(.red)
                     .padding()
-                    .background(Color.white)
-                    .cornerRadius(12)
-                    .shadow(radius: 5)
-                    .padding(.horizontal)
-                    
-                    Spacer()
-                    
-                    // Boutons
-                    VStack(spacing: 20) {
-                        // Bouton Modifier le profil
-                        if let userProfile = userProfile {
-                            NavigationLink(destination: EditProfileView(user: userProfile)) {
-                                VStack {
-                                    Text("Edit profil")
-                                        .fontWeight(.bold)
-                                        .foregroundColor(.blue)
-                                        .padding()
-                                        .frame(maxWidth: .infinity)
-                                }
-                                .background(Color.white)
-                                .cornerRadius(12)
-                                .shadow(color: .gray, radius: 5, x: 0, y: 5)
-                            }
-                        }
-                        // Carte Dark Mode
-                        Button(action: {
-                            isDarkMode.toggle()
-                            // Bascule entre les modes clair et sombre
-                            UIApplication.shared.windows.first?.rootViewController?.view.overrideUserInterfaceStyle = isDarkMode ? .dark : .light
-                        }) {
+            } else if let profile = userProfile {
+                VStack {
+                    Image("user") // Replace with your asset
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 100, height: 100)
+                        .clipShape(Circle())
+                        .overlay(Circle().stroke(Color.white, lineWidth: 4))
+                        .shadow(radius: 5)
+
+                    Text(profile.name ?? "Nom d'utilisateur")
+                        .font(.title2)
+                        .fontWeight(.bold)
+                        .foregroundColor(.white)
+                        .padding(.top, 8)
+                }
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background(Color.blue)
+                
+                VStack(alignment: .center, spacing: 10) {
+                    ProfileDetailRow(icon: "envelope", text: profile.email ?? "Email non disponible")
+                    ProfileDetailRow(icon: "phone", text: profile.phone ?? "Téléphone non disponible")
+                }
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background(Color.white)
+                .cornerRadius(12)
+                .shadow(radius: 5)
+                .padding(.horizontal)
+                
+                Spacer()
+
+                VStack(spacing: 20) {
+                    if let userProfile = userProfile {
+                        NavigationLink(destination: EditProfileView(user: userProfile)) {
                             VStack {
-                                Text(isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode")
+                                Text("Edit profil")
                                     .fontWeight(.bold)
-                                    .foregroundColor(isDarkMode ? .green : .black)
+                                    .foregroundColor(.blue)
                                     .padding()
                                     .frame(maxWidth: .infinity)
                             }
@@ -130,26 +110,52 @@ struct CustomTabBarView: View {
                             .shadow(color: .gray, radius: 5, x: 0, y: 5)
                         }
                     }
-                        
-                        // Bouton Déconnexion
-                        Button(action: {
-                            UserDefaults.standard.removeObject(forKey: "accessToken")
-                            UserDefaults.standard.removeObject(forKey: "refreshToken")
-                            isLoggedOut = true
-                        }) {
-                            VStack {
-                                Text("Déconnexion")
-                                    .fontWeight(.bold)
-                                    .foregroundColor(.red)
-                                    .padding()
-                                    .frame(maxWidth: .infinity)
+                    
+                    Button(action: {
+                        isDarkMode.toggle()
+                        if isDarkMode {
+                            // Get the current window scene and set the interface style to dark mode
+                            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
+                                windowScene.windows.first?.overrideUserInterfaceStyle = .dark
                             }
-                            .background(Color.white)
-                            .cornerRadius(12)
-                            .shadow(color: .gray, radius: 5, x: 0, y: 5)
+                        } else {
+                            // Set the interface style to light mode
+                            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
+                                windowScene.windows.first?.overrideUserInterfaceStyle = .light
+                            }
                         }
+                    }) {
+                        VStack {
+                            Text(isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode")
+                                .fontWeight(.bold)
+                                .foregroundColor(isDarkMode ? .green : .black)
+                                .padding()
+                                .frame(maxWidth: .infinity)
+                        }
+                        .background(Color.white)
+                        .cornerRadius(12)
+                        .shadow(color: .gray, radius: 5, x: 0, y: 5)
+                    }
 
-                    // Terms and Conditions Link
+
+                    Button(action: {
+                        UserDefaults.standard.removeObject(forKey: "accessToken")
+                        UserDefaults.standard.removeObject(forKey: "refreshToken")
+                        isLoggedOut = true
+                        presentationMode.wrappedValue.dismiss()
+                    }) {
+                        VStack {
+                            Text("Déconnexion")
+                                .fontWeight(.bold)
+                                .foregroundColor(.red)
+                                .padding()
+                                .frame(maxWidth: .infinity)
+                        }
+                        .background(Color.white)
+                        .cornerRadius(12)
+                        .shadow(color: .gray, radius: 5, x: 0, y: 5)
+                    }
+
                     Text("Terms and Conditions")
                         .foregroundColor(.blue)
                         .underline()
@@ -161,105 +167,102 @@ struct CustomTabBarView: View {
                         .padding(.top, 20)
                 }
             }
-            .onAppear {
-                fetchUserProfile()
-            }
         }
+        .onAppear {
+            fetchUserProfile()
+        }
+    }
 
-        private func fetchUserProfile() {
-            isLoading = true
-            hasError = false
-            
-            guard let url = URL(string: "http://192.168.1.161:3001/profile") else {
-                print("URL invalide.")
-                hasError = true
+    private func fetchUserProfile() {
+        isLoading = true
+        hasError = false
+        
+        guard let url = URL(string: "http://172.18.19.1:3001/profile") else {
+            print("URL invalide.")
+            hasError = true
+            isLoading = false
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        
+        if let token = UserDefaults.standard.string(forKey: "accessToken") {
+            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        }
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            DispatchQueue.main.async {
                 isLoading = false
+            }
+            
+            if let error = error {
+                print("Erreur lors de la requête : \(error.localizedDescription)")
+                DispatchQueue.main.async {
+                    hasError = true
+                }
                 return
             }
             
-            var request = URLRequest(url: url)
-            request.httpMethod = "GET"
-            
-            // Ajouter le token dans les en-têtes
-            if let token = UserDefaults.standard.string(forKey: "accessToken") {
-                request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-            }
-            
-            URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let data = data else {
+                print("Aucune donnée reçue.")
                 DispatchQueue.main.async {
-                    isLoading = false
+                    hasError = true
                 }
-                
-                if let error = error {
-                    print("Erreur lors de la requête : \(error.localizedDescription)")
-                    DispatchQueue.main.async {
-                        hasError = true
-                    }
-                    return
-                }
-                
-                guard let data = data else {
-                    print("Aucune donnée reçue.")
-                    DispatchQueue.main.async {
-                        hasError = true
-                    }
-                    return
-                }
-                
-                if let responseString = String(data: data, encoding: .utf8) {
-                    print("Réponse brute de l'API : \(responseString)")
-                }
-                
-                if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode != 200 {
-                    print("Erreur: Statut HTTP non 200. Code : \(httpResponse.statusCode)")
-                    DispatchQueue.main.async {
-                        hasError = true
-                    }
-                    return
-                }
-                
-                do {
-                    let decodedProfile = try JSONDecoder().decode(User.self, from: data)
-                    DispatchQueue.main.async {
-                        self.userProfile = decodedProfile
-                    }
-                } catch {
-                    print("Erreur de déchiffrement JSON : \(error.localizedDescription)")
-                    DispatchQueue.main.async {
-                        hasError = true
-                    }
-                }
-            }.resume()
-        }
-    }
-
-    struct ProfileDetailRow: View {
-        let icon: String
-        let text: String
-
-        var body: some View {
-            HStack {
-                Image(systemName: icon)
-                    .foregroundColor(.blue)
-                    .frame(width: 24, height: 24) // Ajuster la taille de l'icône si nécessaire
-                Text(text)
-                    .foregroundColor(.black)
-                    .padding(.leading, 5)
-                Spacer()
+                return
             }
-            .frame(maxWidth: .infinity, alignment: .center)  // Centrer horizontalement le contenu
-            .padding(.vertical, 5)
-        }
+            
+            if let responseString = String(data: data, encoding: .utf8) {
+                print("Réponse brute de l'API : \(responseString)")
+            }
+            
+            if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode != 200 {
+                print("Erreur: Statut HTTP non 200. Code : \(httpResponse.statusCode)")
+                DispatchQueue.main.async {
+                    hasError = true
+                }
+                return
+            }
+            
+            do {
+                let decodedProfile = try JSONDecoder().decode(User.self, from: data)
+                DispatchQueue.main.async {
+                    self.userProfile = decodedProfile
+                }
+            } catch {
+                print("Erreur de déchiffrement JSON : \(error.localizedDescription)")
+                DispatchQueue.main.async {
+                    hasError = true
+                }
+            }
+        }.resume()
     }
+}
 
-    
+struct ProfileDetailRow: View {
+    let icon: String
+    let text: String
+
+    var body: some View {
+        HStack {
+            Image(systemName: icon)
+                .foregroundColor(.blue)
+                .frame(width: 24, height: 24)
+            Text(text)
+                .foregroundColor(.black)
+                .padding(.leading, 5)
+            Spacer()
+        }
+        .frame(maxWidth: .infinity, alignment: .center)
+        .padding(.vertical, 5)
+    }
 }
 
 
 class ProductViewModel: ObservableObject {
     @Published var products: [Product] = []
     func fetchProducts() {
-        guard let url = URL(string: "http://192.168.1.161:3001/product") else { return }
+        guard let url = URL(string: "http://172.18.19.1:3001/product") else { return }
         URLSession.shared.dataTask(with: url) { data, response, error in
             if let data = data {
                 DispatchQueue.main.async {
